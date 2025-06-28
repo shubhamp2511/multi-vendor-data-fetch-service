@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api
+    ports:
+      - '3000:3000'
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/vendor_jobs
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: worker
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/vendor_jobs
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - api
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - '6379:6379'
+
+  vendor-sync:
+    build:
+      context: ./vendors/vendor-sync
+    container_name: vendor-sync
+    ports:
+      - '4000:4000'
+
+  vendor-async:
+    build:
+      context: ./vendors/vendor-async
+    container_name: vendor-async
+    ports:
+      - '4001:4001'
+
+volumes:
+  mongo_data:
