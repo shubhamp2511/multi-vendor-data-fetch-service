@@ -1,1 +1,21 @@
+{
+  "name": "multi-vendor-data-fetch",
+  "version": "1.0.0",
+  "description": "Unified data fetch service from multiple vendors with sync and async handling",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "worker": "node workers/worker.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "dotenv": "^16.3.1",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.3",
+    "redis": "^4.6.7",
+    "uuid": "^9.0.1"
+  },
+  "author": "Shubham Priyadarshi",
+  "license": "MIT"
+}
 
